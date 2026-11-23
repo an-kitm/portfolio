@@ -39,19 +39,22 @@ const def = (text: string): Chip => ({ text, kind: 'def' });
 
 export const person = {
   name: 'Ankit Maurya',
-  title: 'Senior Product Analyst',
+  title: 'Product Analyst',
+  /** The line under the name on the résumé. */
+  titleLine: 'Product Analyst · Product Management',
   company: 'Even Healthcare',
   location: 'Bangalore, India',
   city: 'Bangalore',
   email: 'ankitm.nitsri@gmail.com',
   linkedin: 'https://www.linkedin.com/in/ankit-maurya-nitsri/',
-  resumeMailto: 'mailto:ankitm.nitsri@gmail.com?subject=R%C3%A9sum%C3%A9%20request',
+  /** Public Google Drive file. The `uc?export=download` form downloads it straight away instead of opening Drive. */
+  resumeUrl: 'https://drive.google.com/uc?export=download&id=1WS3cRLgTH7K34NNZDKoVaclgHL8ZwA5M',
   education: 'B.Tech, National Institute of Technology Srinagar · 2017–2021',
   educationShort: 'B.Tech, NIT Srinagar · 2017–2021',
   headline: 'I turn data into product decisions.',
-  skillsLine: 'SQL · Pandas · Experimentation',
+  skillsLine: 'SQL · Python · Experimentation',
   description:
-    'Ankit Maurya is a Senior Product Analyst at Even Healthcare in Bangalore: launch analytics, experiment design, metric definitions and data quality.',
+    'Ankit Maurya is a Product Analyst at Even Healthcare in Bangalore with 4+ years turning data into product decisions: defining metrics, sizing opportunities and shipping tools teams use.',
 } as const;
 
 export const companies: Company[] = [
@@ -59,7 +62,7 @@ export const companies: Company[] = [
     id: 'even',
     name: 'Even Healthcare',
     nameLines: ['Even', 'Healthcare'],
-    role: 'Senior Product Analyst',
+    role: 'Product Analyst',
     period: 'Mar 2025 – now',
     domain: 'Healthtech',
     summary: 'Product, clinical and insurance data, from launch tracking to the economics of an insurer partnership.',
@@ -369,41 +372,61 @@ export const principles = [
   },
 ] as const;
 
+/** Skills, grouped and worded as on the résumé. */
 export const toolkit = {
-  analysis: [
-    'SQL (PostgreSQL, MySQL)',
-    'Window functions',
-    'Query tuning',
-    'Materialized views',
-    'Pandas',
-    'A/B testing',
-    'Power analysis',
-    'Cohort, funnel & retention analysis',
-    'Customer segmentation',
-    'Statistical & predictive analytics',
-  ],
-  tools: [
-    'Metabase',
-    'Tableau',
-    'Power BI',
-    'Streamlit',
-    'Retool',
-    'Excel',
-    'Google Sheets & Apps Script',
-    'Mixpanel',
-    'CleverTap',
-    'Amplitude',
-    'Hotjar',
-    'Zapier',
-    'JIRA',
-    'Linear',
-    'Claude Code',
+  groups: [
+    {
+      title: 'Product',
+      items: [
+        'Launch metrics & KPI design',
+        'Funnel & drop-off analysis',
+        'A/B testing & power analysis',
+        'Customer journey mapping',
+        'Event instrumentation',
+        'PRDs',
+        'Stakeholder management',
+      ],
+    },
+    {
+      title: 'Data',
+      items: [
+        'Advanced SQL (PostgreSQL, MySQL)',
+        'Python (Pandas, NumPy)',
+        'Cohort & retention analysis',
+        'Customer segmentation',
+        'Statistical & predictive analysis',
+        'Data pipelines & data quality',
+      ],
+    },
+    {
+      title: 'Tools',
+      items: [
+        'Metabase',
+        'Tableau',
+        'Power BI',
+        'Streamlit',
+        'Retool',
+        'Excel',
+        'Google Sheets & Apps Script',
+        'Mixpanel',
+        'CleverTap',
+        'Amplitude',
+        'Hotjar',
+        'Zapier',
+        'JIRA',
+        'Linear',
+      ],
+    },
+    {
+      title: 'Soft skills',
+      items: ['Problem solving', 'Critical thinking', 'Time management', 'Cross-functional collaboration'],
+    },
   ],
   /** Prose versions used by version B. */
   analysisProse:
-    'SQL (PostgreSQL, MySQL) with window functions, query tuning and materialized views; Pandas; A/B testing and power analysis; cohort, funnel and retention analysis; customer segmentation; statistical and predictive analytics.',
+    'Launch metrics and KPI design, funnel and drop-off analysis, A/B testing and power analysis, customer journey mapping, event instrumentation; advanced SQL (PostgreSQL, MySQL), Python (Pandas, NumPy), cohort and retention analysis, customer segmentation, statistical and predictive analysis, data pipelines and data quality.',
   toolsProse:
-    'Metabase, Tableau, Power BI, Streamlit, Retool, Excel, Google Sheets and Apps Script, Mixpanel, CleverTap, Amplitude, Hotjar, Zapier, JIRA, Linear and Claude Code.',
+    'Metabase, Tableau, Power BI, Streamlit, Retool, Excel, Google Sheets and Apps Script, Mixpanel, CleverTap, Amplitude, Hotjar, Zapier, JIRA and Linear.',
 } as const;
 
 /** Prefix a public asset or route with the site's base path (works locally and on GitHub Pages). */

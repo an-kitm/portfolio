@@ -8,17 +8,17 @@ import { toolkit } from '../../../content/site';
     <h2 class="a-h2 a-h2--section" id="toolkit-title">What I work with</h2>
   </header>
   <div class="a-toolkit__groups">
-    <div class="a-toolkit__group">
-      <h3>Analysis</h3>
-      <ul class="a-pills">
-        {toolkit.analysis.map((t) => <li>{t}</li>)}
-      </ul>
-    </div>
-    <div class="a-toolkit__group">
-      <h3>Tools</h3>
-      <ul class="a-pills">
-        {toolkit.tools.map((t) => <li>{t}</li>)}
-      </ul>
-    </div>
+    {
+      toolkit.groups.map((g) => (
+        <div class="a-toolkit__group">
+          <h3>{g.title}</h3>
+          <ul class="a-pills">
+            {g.items.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </section>

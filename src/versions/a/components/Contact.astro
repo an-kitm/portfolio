@@ -24,7 +24,12 @@ import Tower from './Tower.astro';
     </div>
     <div class="a-contact__links">
       <a class="a-contact__email" href={`mailto:${person.email}`}>{person.email}</a>
-      <a href={person.resumeMailto}>Résumé on request</a>
+      <a class="a-contact__resume" href={person.resumeUrl} download>
+        Download résumé
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M8 2.5v8.5M4 7.5 8 11.5l4-4M3 14h10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
     </div>
     <p class="a-contact__edu">{person.education}</p>
   </div>

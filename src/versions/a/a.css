@@ -970,7 +970,7 @@ main#main,
 
 .a-toolkit__groups {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   gap: 40px 56px;
 }
 
@@ -1071,6 +1071,7 @@ main#main,
 .a-contact__links a {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   min-height: 44px;
 }
 

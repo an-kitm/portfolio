@@ -4,7 +4,7 @@ import APage from '../versions/a/APage.astro';
 import { person } from '../content/site';
 ---
 
-<Base title={`${person.name} · ${person.title}`} themeColor="#0A0D14" path="" bodyClass="va">
+<Base title={`${person.name} · ${person.titleLine}`} themeColor="#0A0D14" path="" bodyClass="va">
   <script is:inline slot="head">
     // Reserve the 3D layout before first paint (removed again if WebGL turns out to be unavailable).
     try {
