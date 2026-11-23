@@ -1,0 +1,43 @@
+---
+import { person } from '../../content/site';
+import IsoSvg from '../../components/IsoSvg.astro';
+import Anchor from './Anchor.astro';
+import Papers from './Papers.astro';
+import { careerTowerDrawing } from './decor';
+
+const tower = careerTowerDrawing();
+---
+
+<section id="top" class="b-hero b-panel" data-nav="light" aria-labelledby="hero-title">
+  <Papers />
+
+  <aside class="b-card" aria-label="Contact card">
+    <div class="b-card__thumb" aria-hidden="true"><IsoSvg drawing={tower} class="b-card__tower" /></div>
+    <div class="b-card__body">
+      <div class="b-card__row">
+        <span class="b-card__name">{person.name}</span><span class="b-card__city">{person.city}</span>
+      </div>
+      <div class="b-card__row">
+        <span class="b-card__note">Résumé on request</span>
+        <a class="b-card__cta" href={`mailto:${person.email}`}>Email me</a>
+      </div>
+    </div>
+  </aside>
+
+  <h1 id="hero-title" class="b-display b-hero__title b-reveal">
+    I turn<br class="b-br-m" /> data<br class="b-br-d" /> into<br class="b-br-m" /> product<br /> decisions.
+  </h1>
+
+  <div class="b-hero__meta b-reveal" style="--i:2">
+    <p class="b-hero__role">{person.title} at {person.company} · {person.city}</p>
+    <a class="b-pill" href={`mailto:${person.email}`}>Email me</a>
+    <a class="b-link-arrow" href="#work"
+      >See the work<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false"
+        ><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg
+      ></a
+    >
+  </div>
+
+  <div class="b-hero__band" aria-hidden="true"></div>
+  <Anchor kind="tower" drawing={tower} palette="tower" group="hero" edge="paper" class="b-hero__tower" />
+</section>

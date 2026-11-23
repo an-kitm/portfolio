@@ -1,0 +1,65 @@
+---
+import { companies, person, type Company, type CompanyId } from '../../../content/site';
+import { STACKED_TOP } from '../palettes';
+import Tower from './Tower.astro';
+
+const byId = (id: CompanyId): Company => {
+  const c = companies.find((x) => x.id === id);
+  if (!c) throw new Error(`Missing company ${id}`);
+  return c;
+};
+const noesys = byId('noesys');
+const pixis = byId('pixis');
+const even = byId('even');
+---
+
+<section class="a-hero a-wrap" id="top" aria-labelledby="a-hero-title">
+  <div class="a-hero__text">
+    <p class="a-eyebrow">{person.name} · {person.title}</p>
+    <h1 id="a-hero-title">{person.headline}</h1>
+    <p class="a-hero__intro">{person.intro}</p>
+    <div class="a-ctas">
+      <a class="a-btn a-btn--primary" href={`mailto:${person.email}`}>Email me</a>
+      <a class="a-btn a-btn--ghost" href="#work">
+        See the work
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+    <div class="a-hero__meta">
+      <span>{person.location}</span>
+      <span>{person.skillsLine}</span>
+    </div>
+  </div>
+
+  <div class="a-hero__visual">
+    <div class="a-isogrid a-fallback" aria-hidden="true"></div>
+    <div class="a-hero__towers a-fallback" aria-hidden="true">
+      <Tower looks={['idle', 'idle', 'idle']} frameTop={STACKED_TOP} />
+      <Tower looks={['idle', 'idle', 'idle']} frameTop={STACKED_TOP} />
+      <Tower looks={['now', 'now', 'now']} frameTop={STACKED_TOP} />
+    </div>
+    <ul class="a-hero__tags a-fallback">
+      <li>
+        <a class="a-tag" href="#noesys">
+          <span class="a-tag__name">{noesys.name}</span>
+          <span class="a-tag__period">{noesys.period}</span>
+        </a>
+      </li>
+      <li>
+        <a class="a-tag" href="#pixis">
+          <span class="a-tag__name">{pixis.name}</span>
+          <span class="a-tag__period">{pixis.period}</span>
+        </a>
+      </li>
+      <li>
+        <a class="a-tag" href="#even">
+          <span class="a-tag__name">{even.name}<span class="a-now">Now</span></span>
+          <span class="a-tag__period">{even.period}</span>
+        </a>
+      </li>
+    </ul>
+    <p class="a-hero__hint a-fallback">Scroll to open each company, or pick a tower</p>
+  </div>
+</section>

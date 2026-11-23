@@ -1,0 +1,53 @@
+---
+import { person, withBase } from '../content/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  themeColor: string;
+  /** Path of this page under the base, e.g. "b/". */
+  path: string;
+  /** Keep review versions out of search results until one is chosen. */
+  noindex?: boolean;
+  bodyClass?: string;
+}
+
+const { title, description = person.description, themeColor, path, noindex = false, bodyClass } = Astro.props;
+const canonical = new URL(withBase(path), Astro.site).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  jobTitle: person.title,
+  worksFor: { '@type': 'Organization', name: person.company },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'National Institute of Technology Srinagar' },
+  address: { '@type': 'PostalAddress', addressLocality: 'Bangalore', addressCountry: 'IN' },
+  email: `mailto:${person.email}`,
+  sameAs: [person.linkedin],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content={themeColor} />
+    <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+  </body>
+</html>

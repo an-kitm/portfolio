@@ -1,0 +1,75 @@
+---
+import { atlas, withBase } from '../../../content/site';
+import { SPLIT_TOP } from '../palettes';
+import Tower from './Tower.astro';
+
+const labels = atlas.features.map((f) => ({ n: f.n, title: f.title, tone: 'accent' as const }));
+---
+
+<section class="a-atlas" id="atlas" aria-labelledby="atlas-title">
+  <div class="a-wrap a-chapter__inner a-chapter__inner--even">
+    <div class="a-row">
+      <div class="a-row__visual a-fallback" aria-hidden="true">
+        <div class="a-isogrid"></div>
+        <Tower
+          looks={['side', 'side', 'side']}
+          split={1}
+          lift={0.7}
+          dashed
+          frameTop={SPLIT_TOP + 0.7}
+          labels={labels}
+        />
+      </div>
+      <div class="a-row__text a-row__text--loose">
+        <header class="a-head">
+          <p class="a-eyebrow a-eyebrow--sm">{atlas.label}</p>
+          <h2 class="a-h2" id="atlas-title">{atlas.name}</h2>
+          <p class="a-role">{atlas.role}</p>
+          <p class="a-summary a-summary--soft">{atlas.tagline}</p>
+          <p class="a-summary">{atlas.problem}</p>
+          <div class="a-ctas">
+            <a class="a-btn a-btn--ghost" href={atlas.github} target="_blank" rel="noopener">
+              View on GitHub
+              <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+                <path d="M6 3h7v7M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+          </div>
+        </header>
+
+        <div class="a-cards">
+          {
+            atlas.features.map((f) => (
+              <article class="a-card" id={f.id} data-atlas-card={Number(f.n)}>
+                <span class="a-card__n">{f.n}</span>
+                <h3 class="a-card__title">{f.title}</h3>
+                <p>{f.body}</p>
+                <ul class="a-chips">
+                  {f.chips.map((c) => (
+                    <li class="a-chip">{c}</li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+
+        <p class="a-stack">{atlas.stack}</p>
+
+        <figure class="a-shot">
+          <div class="a-shot__frame">
+            <img
+              src={withBase(atlas.screenshot.file)}
+              alt={atlas.screenshot.alt}
+              width={atlas.screenshot.width}
+              height={atlas.screenshot.height}
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <figcaption>{atlas.screenshot.caption}</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,16 @@
+---
+import { person } from '../../content/site';
+---
+
+<section id="contact" class="b-contact" data-nav="light" aria-labelledby="contact-title">
+  <h2 id="contact-title" class="b-display b-contact__title b-reveal">Let’s<br class="b-br-m" /> talk.</h2>
+  <div class="b-contact__line b-reveal" style="--i:1">
+    <a class="b-contact__email" href={`mailto:${person.email}`}>{person.email}</a>
+    <a class="b-contact__cta" href={`mailto:${person.email}`}>Email me</a>
+  </div>
+  <div class="b-contact__links b-reveal" style="--i:2">
+    <a href={person.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a href={person.resumeMailto}>Résumé on request</a>
+    <span>{person.educationShort}</span>
+  </div>
+</section>

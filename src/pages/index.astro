@@ -1,0 +1,17 @@
+---
+import Base from '../layouts/Base.astro';
+import APage from '../versions/a/APage.astro';
+import { person } from '../content/site';
+---
+
+<Base title={`${person.name} · ${person.title}`} themeColor="#0A0D14" path="" bodyClass="va">
+  <script is:inline slot="head">
+    // Reserve the 3D layout before first paint (removed again if WebGL turns out to be unavailable).
+    try {
+      if (new URLSearchParams(location.search).get('webgl') !== '0') {
+        document.documentElement.classList.add('a3d-pre');
+      }
+    } catch (e) {}
+  </script>
+  <APage />
+</Base>

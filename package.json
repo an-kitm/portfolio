@@ -1,0 +1,30 @@
+{
+  "name": "ankit-maurya-portfolio",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "^5.3.0",
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/newsreader": "^5.3.0",
+    "@fontsource-variable/roboto": "^5.3.0",
+    "@fontsource-variable/roboto-mono": "^5.3.0",
+    "@fontsource-variable/space-grotesk": "^5.3.0",
+    "astro": "^7.4.13",
+    "gsap": "^3.15.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^26.6.6",
+    "@types/three": "^0.187.0",
+    "typescript": "^6.0.3"
+  }
+}

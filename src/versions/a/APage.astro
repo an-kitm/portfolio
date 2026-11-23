@@ -1,0 +1,66 @@
+---
+import '@fontsource-variable/roboto';
+import '@fontsource-variable/roboto-mono';
+import './a.css';
+
+import { companies, person } from '../../content/site';
+import AtlasSection from './components/AtlasSection.astro';
+import Chapter from './components/Chapter.astro';
+import Contact from './components/Contact.astro';
+import Hero from './components/Hero.astro';
+import Nav from './components/Nav.astro';
+import Overlay3D from './components/Overlay3D.astro';
+import Principles from './components/Principles.astro';
+import Toolkit from './components/Toolkit.astro';
+---
+
+<a class="a-skip" href="#work">Skip to the work</a>
+<Nav />
+<Overlay3D />
+
+<!--
+  Each .a-panel pins once it has scrolled into place and the next one slides up over it (scene/stack.ts).
+  Panels must stay direct siblings inside <main> so each one stays pinned until the page ends.
+-->
+<main id="main">
+  <div class="a-panel a-panel--hero">
+    <Hero />
+  </div>
+  <div class="a-anchor" id="work" tabindex="-1"></div>
+  {
+    companies.map((c, i) => (
+      <div class="a-panel">
+        <Chapter company={c} index={i + 1} total={companies.length} />
+      </div>
+    ))
+  }
+  <div class="a-panel">
+    <AtlasSection />
+  </div>
+  <div class="a-panel a-panel--solid">
+    <Principles />
+  </div>
+  <!-- The last sheet scrolls away instead of pinning, uncovering the contact section and the towers behind it. -->
+  <div class="a-panel a-panel--solid a-panel--last">
+    <Toolkit />
+  </div>
+  <Contact />
+</main>
+
+<footer class="a-footer">
+  <div class="a-wrap a-footer__inner">
+    <span>© 2026 {person.name}</span>
+    <span>{person.location}</span>
+    <span>Built with Astro and Three.js</span>
+  </div>
+</footer>
+
+<script>
+  import { initMenu } from './scene/menu';
+  import { boot } from './scene/boot';
+  import { initStack } from './scene/stack';
+
+  initMenu();
+  initStack();
+  boot();
+</script>

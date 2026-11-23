@@ -1,0 +1,31 @@
+---
+import { person } from '../../../content/site';
+import { STACKED_TOP } from '../palettes';
+import Tower from './Tower.astro';
+---
+
+<section class="a-contact" id="contact" aria-labelledby="contact-title">
+  <div class="a-contact__inner">
+    <div class="a-emblem a-fallback" aria-hidden="true">
+      <Tower looks={['idle', 'idle', 'idle']} frameTop={STACKED_TOP} />
+      <Tower looks={['idle', 'idle', 'idle']} frameTop={STACKED_TOP} />
+      <Tower looks={['now', 'now', 'now']} frameTop={STACKED_TOP} />
+    </div>
+    <h2 class="a-contact__title" id="contact-title">Let’s talk about your data.</h2>
+    <p class="a-contact__lede">Email is the fastest way to reach me. I’m also on LinkedIn.</p>
+    <div class="a-ctas a-ctas--center">
+      <a class="a-btn a-btn--primary" href={`mailto:${person.email}`}>Email me</a>
+      <a class="a-btn a-btn--ghost" href={person.linkedin} target="_blank" rel="noopener">
+        LinkedIn
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          <path d="M6 3h7v7M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </a>
+    </div>
+    <div class="a-contact__links">
+      <a class="a-contact__email" href={`mailto:${person.email}`}>{person.email}</a>
+      <a href={person.resumeMailto}>Résumé on request</a>
+    </div>
+    <p class="a-contact__edu">{person.education}</p>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+import { person } from '../../content/site';
+---
+
+<header class="b-nav" data-theme="light">
+  <nav class="b-nav__links" aria-label="Sections">
+    <a href="#work">Work</a>
+    <a href="#atlas">Atlas</a>
+    <a href="#principles">How I work</a>
+  </nav>
+  <a class="b-nav__mark" href="#top">{person.name}</a>
+  <div class="b-nav__end">
+    <nav class="b-nav__links" aria-label="Contact">
+      <a href={person.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href={`mailto:${person.email}`}>Email</a>
+    </nav>
+    <button class="b-nav__menu" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="b-menu">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+        <path d="M3 7h14M3 13h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+<nav id="b-menu" class="b-menu" aria-label="Menu" hidden>
+  <a href="#work">Work</a>
+  <a href="#atlas">Atlas</a>
+  <a href="#principles">How I work</a>
+  <a href="#contact">Contact</a>
+  <a href={person.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+</nav>

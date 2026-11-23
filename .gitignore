@@ -424,3 +424,12 @@ FodyWeavers.xsd
 
 # Official VS Code C# Dev Kit Extension exclusion
 #*.lscache
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+.DS_Store
+.env
+.env.*
+!.env.example

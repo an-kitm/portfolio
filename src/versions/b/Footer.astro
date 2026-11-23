@@ -1,0 +1,69 @@
+---
+import { atlas, companies, person } from '../../content/site';
+import IsoSvg from '../../components/IsoSvg.astro';
+import Anchor from './Anchor.astro';
+import { atlasDrawing, COMPANY_COLOUR, footerBlocks, markDrawing, slabDrawing } from './decor';
+
+const mark = markDrawing();
+---
+
+<footer class="b-footer" data-nav="light">
+  <div class="b-footer__top">
+    <div class="b-footer__mark" aria-hidden="true"><IsoSvg drawing={mark} /></div>
+    <div class="b-footer__cols">
+      <div>
+        <h2 class="b-serif">Work</h2>
+        <ul>
+          {companies.map((c) => <li><a href={`#${c.id}`}>{c.name}</a></li>)}
+          <li><a href="#atlas">Atlas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="b-serif">Elsewhere</h2>
+        <ul>
+          <li><a href={person.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href={atlas.github} target="_blank" rel="noopener">GitHub ↗</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="b-serif">Contact</h2>
+        <ul>
+          <li><a href={`mailto:${person.email}`}>Email</a></li>
+          <li><a href={person.resumeMailto}>Résumé on request</a></li>
+        </ul>
+      </div>
+    </div>
+    <nav class="b-footer__compact" aria-label="Footer">
+      <a href="#work">Work</a>
+      <a href="#atlas">Atlas</a>
+      <a href="#principles">How I work</a>
+    </nav>
+  </div>
+
+  <div class="b-footer__name-wrap">
+    <div class="b-footer__decor" aria-hidden="true">
+      {
+        footerBlocks.map((f) =>
+          f.palette === 'atlas-paper' ? (
+            <Anchor kind="atlas" drawing={atlasDrawing(false)} palette="atlas-paper" group="footer" place={f.place} />
+          ) : (
+            <Anchor
+              kind="slab"
+              drawing={slabDrawing(COMPANY_COLOUR[f.palette], 0, true)}
+              palette={f.palette}
+              group="footer"
+              place={f.place}
+              edge="paper"
+            />
+          ),
+        )
+      }
+    </div>
+    <p class="b-footer__name b-serif b-reveal">Ankit<br class="b-br-m" /> Maurya</p>
+  </div>
+
+  <div class="b-footer__bottom">
+    <span>© 2026 {person.name}</span>
+    <span>Built with Astro and Three.js</span>
+  </div>
+</footer>

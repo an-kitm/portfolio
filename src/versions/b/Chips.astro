@@ -1,0 +1,15 @@
+---
+import { companies } from '../../content/site';
+import { COMPANY_COLOUR } from './decor';
+---
+
+<nav class="b-chips" aria-label="Companies">
+  {
+    companies.map((c) => (
+      <a href={`#${c.id}`} style={`--c:${COMPANY_COLOUR[c.id]}`}>
+        <span class="b-chips__swatch" aria-hidden="true" />
+        {c.name.split(' ')[0]}
+      </a>
+    ))
+  }
+</nav>

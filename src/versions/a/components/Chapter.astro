@@ -1,0 +1,112 @@
+---
+import type { Company } from '../../../content/site';
+import { SPLIT_TOP, type Look } from '../palettes';
+import Card from './Card.astro';
+import Tower from './Tower.astro';
+
+interface Props {
+  company: Company;
+  index: number;
+  total: number;
+}
+
+const { company, index, total } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+const eyebrow = [`${pad(index)} / ${pad(total)}`, company.period, company.domain].filter(Boolean).join(' · ');
+
+/** Looks for the tower next to block row `n` (1 = top block). */
+const looksFor = (n: number): [Look, Look, Look] => [
+  n === 1 ? 'active' : 'idle',
+  n === 2 ? 'active' : 'idle',
+  n === 3 ? 'active' : 'idle',
+];
+const labelsFor = (n: number | 'all') =>
+  company.blocks.map((b, i) => ({ n: b.n, title: b.title, active: n === 'all' || n === i + 1 }));
+
+const compact = company.id === 'noesys';
+const titleId = `${company.id}-title`;
+---
+
+<section class:list={['a-chapter', compact && 'a-chapter--compact']} id={company.id} aria-labelledby={titleId}>
+  <div class="a-wrap a-chapter__inner">
+    {
+      compact ? (
+        <div class="a-row">
+          <div class="a-row__visual a-fallback" aria-hidden="true">
+            <div class="a-isogrid" />
+            <Tower looks={['active', 'active', 'active']} split={1} frameTop={SPLIT_TOP} labels={labelsFor('all')} />
+          </div>
+          <div class="a-row__text a-row__text--loose">
+            <header class="a-head">
+              <p class="a-eyebrow a-eyebrow--sm">{eyebrow}</p>
+              <h2 class="a-h2" id={titleId}>{company.name}</h2>
+              <p class="a-role">{company.role}</p>
+              <p class="a-summary">{company.summary}</p>
+            </header>
+            <div class="a-cols">
+              {company.blocks.map((b) => (
+                <section class="a-col" id={b.id} aria-labelledby={`${b.id}-title`}>
+                  <div class="a-blockhead">
+                    <span class="a-blockhead__n">{b.n}</span>
+                    <h3 class="a-h3 a-h3--sm" id={`${b.id}-title`}>
+                      {b.title}
+                    </h3>
+                  </div>
+                  {b.items.map((item) => (
+                    <Card item={item} small />
+                  ))}
+                </section>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <header class="a-head">
+            <p class="a-eyebrow a-eyebrow--sm">{eyebrow}</p>
+            <h2 class="a-h2" id={titleId}>
+              {company.name}
+            </h2>
+            <p class="a-role">{company.role}</p>
+            <p class="a-summary">{company.summary}</p>
+            <nav aria-label={`${company.name} sections`}>
+              <ul class="a-blocknav">
+                {company.blocks.map((b) => (
+                  <li>
+                    <a href={`#${b.id}`}>
+                      <span>{b.n}</span>
+                      {b.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </header>
+          <div class="a-rows">
+            {company.blocks.map((b, i) => (
+              <section class="a-row" id={b.id} aria-labelledby={`${b.id}-title`}>
+                <div class="a-row__visual a-fallback" aria-hidden="true">
+                  <div class="a-isogrid" />
+                  <Tower looks={looksFor(i + 1)} split={1} frameTop={SPLIT_TOP} labels={labelsFor(i + 1)} />
+                </div>
+                <div class="a-row__text">
+                  <div class="a-blockhead">
+                    <span class="a-blockhead__n">{b.n}</span>
+                    <h3 class="a-h3" id={`${b.id}-title`}>
+                      {b.title}
+                    </h3>
+                  </div>
+                  <div class="a-cards">
+                    {b.items.map((item) => (
+                      <Card item={item} />
+                    ))}
+                  </div>
+                </div>
+              </section>
+            ))}
+          </div>
+        </>
+      )
+    }
+  </div>
+</section>

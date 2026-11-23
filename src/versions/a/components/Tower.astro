@@ -1,0 +1,49 @@
+---
+import IsoSvg from '../../../components/IsoSvg.astro';
+import { drawBlocks, GEO } from '../../../lib/iso';
+import { shadowFill, towerSpecs, type Look } from '../palettes';
+
+interface Label {
+  n: string;
+  title: string;
+  active?: boolean;
+  tone?: 'accent';
+}
+
+interface Props {
+  /** Top-first: block 01 is the top block. */
+  looks: [Look, Look, Look];
+  split?: number;
+  lift?: number;
+  dashed?: boolean;
+  frameTop?: number;
+  labels?: Label[];
+  class?: string;
+}
+
+const { looks, split = 0, lift = 0, dashed = false, frameTop, labels, class: className } = Astro.props;
+
+const drawing = drawBlocks(towerSpecs(looks, split, lift, dashed), {
+  scale: 40,
+  shadow: { k: GEO.shadowK, fill: shadowFill() },
+  frameTop,
+});
+
+// drawBlocks reports block centres bottom-first; labels are top-first.
+const mids = [...drawing.blockMidY].reverse();
+---
+
+<div class:list={['a-tower', labels && 'a-tower--labelled', className]}>
+  <div class="a-tower__art"><IsoSvg drawing={drawing} /></div>
+  {
+    labels?.map((l, i) => (
+      <div
+        class:list={['a-tower__label', l.active && 'is-active', l.tone && `tone-${l.tone}`]}
+        style={`top: ${(mids[i] ?? 50).toFixed(2)}%`}
+      >
+        <span class="a-tower__num">{l.n}</span>
+        <span class="a-tower__title">{l.title}</span>
+      </div>
+    ))
+  }
+</div>

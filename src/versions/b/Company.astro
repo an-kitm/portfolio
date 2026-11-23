@@ -1,0 +1,75 @@
+---
+import type { Company } from '../../content/site';
+import Anchor from './Anchor.astro';
+import { COMPANY_COLOUR, cubeDrawing, decor, slabDrawing } from './decor';
+
+interface Props {
+  company: Company;
+}
+
+const { company: c } = Astro.props;
+const d = decor[c.id];
+const colour = COMPANY_COLOUR[c.id];
+const cube = cubeDrawing(colour);
+---
+
+<section id={c.id} class="b-co b-panel" data-nav="dark" aria-labelledby={`${c.id}-title`} style={`--grad:${d.gradient}`}>
+  <div class="b-co__decor" aria-hidden="true">
+    {
+      d.slabs.map((s) => (
+        <>
+          <Anchor kind="slab" drawing={slabDrawing(colour, s.k)} palette={c.id} k={s.k} group={c.id} place={s} />
+          <span class="b-co__n" style={`--lx:${s.lx};--ly:${s.ly};--mlx:${s.mlx};--mly:${s.mly}`}>
+            {s.n}
+          </span>
+        </>
+      ))
+    }
+    {
+      d.cubes.map((p) => (
+        <Anchor kind="cube" drawing={cube} palette={c.id} group={c.id} place={p} edge="none" depth={1.6} />
+      ))
+    }
+  </div>
+
+  <h2 id={`${c.id}-title`} class="b-display b-co__name">
+    {
+      c.nameLines.map((line, i) => (
+        <span class="b-line" style={`--i:${i}`}>
+          <span>{line}</span>
+        </span>
+      ))
+    }
+  </h2>
+
+  <div class="b-co__meta b-reveal" style={`--gap:${d.gap}px;--mgap:${d.mgap}px`}>
+    <p>{c.role}{c.domain ? ` · ${c.domain}` : ''}</p>
+    <p class="b-co__period">{c.period}</p>
+  </div>
+
+  <div class="b-co__grid">
+    {
+      c.blocks.map((b, bi) => (
+        <section class="b-co__block" aria-labelledby={`${b.id}-title`}>
+          <div class="b-co__head b-reveal" style={`--i:${bi}`}>
+            <span class="b-co__bn">{b.n}</span>
+            <h3 id={`${b.id}-title`} class="b-serif b-co__bt">
+              {b.title}
+            </h3>
+          </div>
+          <ul class="b-items">
+            {b.items.map((it, ii) => (
+              <li class="b-item b-reveal" style={`--i:${bi + ii + 1}`}>
+                <div class="b-item__head">
+                  <h4 class="b-item__title">{it.title}</h4>
+                  {it.label && <p class="b-item__label">{it.label}</p>}
+                </div>
+                <p class="b-item__body">{it.body}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,42 @@
+---
+// Version B's full page, kept for reference after version A was chosen. It is not a route any more; to bring
+// it back, render <BPage /> from src/pages/b/index.astro.
+import Base from '../../layouts/Base.astro';
+import '@fontsource-variable/archivo/wdth.css';
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/inter';
+import './b.css';
+import Nav from './Nav.astro';
+import Hero from './Hero.astro';
+import Company from './Company.astro';
+import Chips from './Chips.astro';
+import Atlas from './Atlas.astro';
+import Principles from './Principles.astro';
+import Toolkit from './Toolkit.astro';
+import Contact from './Contact.astro';
+import Footer from './Footer.astro';
+import { companies, person } from '../../content/site';
+---
+
+<Base title={`${person.name} · ${person.title}`} path="b/" themeColor="#E8E4DC" noindex bodyClass="b">
+  <a class="b-skip" href="#work">Skip to the work</a>
+  <Nav />
+  <canvas class="b-canvas" aria-hidden="true"></canvas>
+  <main class="b-stack">
+    <Hero />
+    <div id="work" class="b-anchor" tabindex="-1"></div>
+    {companies.map((c) => <Company company={c} />)}
+    <Atlas />
+    <Principles />
+    <Toolkit />
+    <div class="b-panel b-end" data-nav="light">
+      <Contact />
+      <Footer />
+    </div>
+  </main>
+  <Chips />
+</Base>
+
+<script>
+  import './main';
+</script>

@@ -1,0 +1,19 @@
+---
+import { principles } from '../../content/site';
+---
+
+<section id="principles" class="b-principles b-panel" data-nav="light" aria-labelledby="principles-title">
+  <h2 id="principles-title" class="b-display b-principles__title">
+    <span class="b-line"><span>How I work</span></span>
+  </h2>
+  <ol class="b-hiw">
+    {
+      principles.map((p, i) => (
+        <li class="b-hiw__item b-reveal" style={`--i:${i}`}>
+          <span class="b-hiw__n">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="b-serif b-hiw__title">{p.title}</h3>
+        </li>
+      ))
+    }
+  </ol>
+</section>

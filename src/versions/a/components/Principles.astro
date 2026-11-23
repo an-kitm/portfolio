@@ -1,0 +1,22 @@
+---
+import { principles } from '../../../content/site';
+---
+
+<section class="a-principles" id="principles" aria-labelledby="principles-title">
+  <div class="a-wrap a-principles__inner">
+    <header class="a-head">
+      <p class="a-eyebrow a-eyebrow--sm">How I work</p>
+      <h2 class="a-h2 a-h2--section" id="principles-title">Four habits behind the numbers</h2>
+    </header>
+    <ol class="a-principles__list">
+      {
+        principles.map((p, i) => (
+          <li>
+            <span class="a-principles__n">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{p.title}</h3>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

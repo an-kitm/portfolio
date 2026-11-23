@@ -1,0 +1,1464 @@
+/* Version A · Dark observatory. Tokens match the A artboards exactly. */
+
+:root {
+  --a-ground: #0a0d14;
+  --a-raised: rgba(13, 17, 26, 0.86);
+  --a-card: #10151f;
+  --a-card-border: #1e2635;
+  --a-hair: #161c29;
+  --a-chip-border: #263044;
+  --a-pill-border: #222b3c;
+  --a-ghost-border: #2a3448;
+  --a-text: #e8ecf3;
+  --a-strong: #f2f5fa;
+  --a-soft: #c9d1de;
+  --a-muted: #a0aabd;
+  --a-faint: #7d879b;
+  --a-accent: #5aa9ff;
+  --a-accent-hover: #8cc4ff;
+  --a-on-accent: #06101f;
+  --a-signal: #ffb547;
+  --a-signal-bg: #272119;
+  --a-display: 'Roboto Variable', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --a-body: 'Roboto Variable', Roboto, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --a-mono: 'Roboto Mono Variable', 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --a-ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --a-header: 73px;
+  --a-band: clamp(280px, 44vh, 440px);
+}
+
+html {
+  background: var(--a-ground);
+  color-scheme: dark;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--a-header) + 16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body.va {
+  margin: 0;
+  background: var(--a-ground);
+  color: var(--a-text);
+  font-family: var(--a-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.va a {
+  color: var(--a-accent);
+  text-decoration: none;
+}
+
+.va a:hover {
+  color: var(--a-accent-hover);
+}
+
+.va a:focus-visible,
+.va button:focus-visible {
+  outline: 2px solid var(--a-accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.va svg {
+  flex: none;
+}
+
+.va ::selection {
+  background: rgba(90, 169, 255, 0.3);
+}
+
+.a-skip {
+  position: absolute;
+  left: -9999px;
+  top: 12px;
+  z-index: 50;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--a-accent);
+  font-weight: 600;
+}
+
+.va .a-skip,
+.va .a-skip:hover {
+  color: var(--a-on-accent);
+}
+
+.a-skip:focus {
+  left: 16px;
+}
+
+.a-wrap {
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 32px;
+  box-sizing: border-box;
+}
+
+main#main,
+.a-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Stacked sections ----------
+   Each section sits in a .a-panel that scrolls until its bottom meets the bottom of the screen (a short one, until
+   its top meets the header), then stays pinned while the next panel slides up over it. scene/stack.ts sets
+   --stick (where the panel pins), --cover (0..1, how much of it the next panel covers) and, on desktop with the
+   3D scene, --solid (how far from the left the sheet is opaque: just past its text, so the towers stay visible). */
+
+.a-panel {
+  position: sticky;
+  top: var(--stick, 0px);
+  isolation: isolate;
+  background: var(--a-ground);
+  transform: scale(calc(1 - var(--cover, 0) * 0.05));
+  transform-origin: 50% calc(var(--stick, 0px) * -1 + 50vh);
+}
+
+/* The covered panel dims. */
+.a-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: var(--a-ground);
+  opacity: calc(var(--cover, 0) * 0.6);
+  pointer-events: none;
+}
+
+/* A soft shadow along the top edge of each sheet, so the one sliding up reads as lying over the last. */
+.a-panel:not(.a-panel--hero)::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 40px;
+  background: linear-gradient(to top, rgba(3, 5, 9, 0.5), rgba(3, 5, 9, 0));
+  pointer-events: none;
+}
+
+.a-panel.is-covered {
+  visibility: hidden;
+}
+
+/* The last sheet scrolls away rather than pinning, uncovering the contact section. */
+.a-panel--last {
+  position: relative;
+  top: auto;
+  transform: none;
+}
+
+.a-measuring .a-panel {
+  transform: none;
+}
+
+.a-unstick .a-panel {
+  position: relative;
+  top: 0;
+}
+
+.a-reduce .a-panel {
+  transform: none;
+}
+
+.a-anchor {
+  display: block;
+  height: 0;
+  outline: none;
+}
+
+.va [tabindex='-1']:focus {
+  outline: none;
+}
+
+@media (min-width: 901px) {
+  /* With the 3D scene behind, a sheet is solid only as far as the text it slides over, and see-through over the
+     towers. The dimming of a covered sheet reaches just past its own text. */
+  .a3d-pre .a-panel:not(.a-panel--solid) {
+    background: linear-gradient(
+      90deg,
+      var(--a-ground) var(--solid, 100%),
+      rgba(10, 13, 20, 0) calc(var(--solid, 100%) + 32px)
+    );
+  }
+
+  .a3d-pre .a-panel:not(.a-panel--solid)::after {
+    background: linear-gradient(
+      90deg,
+      var(--a-ground) var(--shade, 100%),
+      rgba(10, 13, 20, 0) calc(var(--shade, 100%) + 32px)
+    );
+  }
+
+  .a3d-pre .a-panel:not(.a-panel--solid)::before {
+    -webkit-mask-image: linear-gradient(90deg, #000 var(--solid, 100%), transparent calc(var(--solid, 100%) + 32px));
+    mask-image: linear-gradient(90deg, #000 var(--solid, 100%), transparent calc(var(--solid, 100%) + 32px));
+  }
+
+  /* Nothing lies under the first sheet, so the floor grid stays visible behind the hero text. */
+  .a3d-pre .a-panel--hero {
+    background: none;
+  }
+
+  /* With the 3D scene the visual column is empty space for the tower in focus and its labels, so it keeps its
+     full width on narrower desktops too, and chapter intros stay within the text column beside it. */
+  .a3d-pre .a-row__visual {
+    flex-basis: 400px;
+  }
+
+  .a3d-pre .a-row__text {
+    flex-basis: 360px;
+  }
+
+  .a3d-pre .a-chapter__inner > .a-head {
+    max-width: min(780px, calc(100% - 456px));
+  }
+}
+
+/* Content rising in as it scrolls into view (only when JavaScript runs). */
+.a-js-reveal .a-rv {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.6s ease,
+    transform 0.8s var(--a-ease-out);
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+
+.a-js-reveal .a-rv.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.a-reduce.a-js-reveal .a-rv {
+  transform: none;
+  transition: opacity 0.3s ease;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .a-panel {
+    transform: none;
+  }
+
+  .a-js-reveal .a-rv {
+    transform: none;
+    transition: opacity 0.3s ease;
+    transition-delay: 0s;
+  }
+}
+
+/* ---------- Header ---------- */
+
+.a-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(10, 13, 20, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--a-hair);
+}
+
+.a-nav {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 32px;
+  padding-block: 14px;
+}
+
+.a-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+}
+
+.va .a-brand,
+.va .a-brand:hover {
+  color: var(--a-text);
+}
+
+.a-brand span {
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+
+.a-brand polygon {
+  stroke: var(--a-accent);
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.a-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.va .a-links a:not(.a-btn) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  color: var(--a-muted);
+  font-size: 15px;
+}
+
+.va .a-links a:not(.a-btn):hover {
+  color: var(--a-text);
+}
+
+.a-links li:last-child {
+  margin-left: 8px;
+}
+
+.a-menu-btn {
+  display: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid var(--a-pill-border);
+  background: transparent;
+  color: var(--a-text);
+  cursor: pointer;
+}
+
+/* ---------- Buttons ---------- */
+
+.a-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 999px;
+  box-sizing: border-box;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.2;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.va .a-btn--primary,
+.va .a-btn--primary:hover {
+  background: var(--a-accent);
+  color: var(--a-on-accent);
+}
+
+.va .a-btn--primary:hover {
+  background: var(--a-accent-hover);
+}
+
+.va .a-btn--ghost {
+  padding: 0 22px;
+  border: 1px solid var(--a-ghost-border);
+  color: var(--a-text);
+  font-weight: 500;
+}
+
+.va .a-btn--ghost:hover {
+  border-color: var(--a-muted);
+  color: var(--a-text);
+}
+
+.a-btn--sm {
+  min-height: 44px;
+  padding: 0 20px;
+  font-size: 15px;
+}
+
+.a-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.a-ctas--center {
+  justify-content: center;
+}
+
+/* ---------- Shared type ---------- */
+
+.a-eyebrow {
+  margin: 0;
+  font-family: var(--a-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-muted);
+}
+
+.a-eyebrow--sm {
+  font-size: 12px;
+}
+
+.a-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 780px;
+}
+
+.a-h2 {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: clamp(36px, 4vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--a-strong);
+}
+
+.a-h2--section {
+  font-size: clamp(32px, 3.6vw, 44px);
+}
+
+.a-role {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--a-text);
+}
+
+.a-summary {
+  margin: 0;
+  max-width: 36em;
+  color: var(--a-muted);
+  text-wrap: pretty;
+}
+
+.a-summary--soft {
+  color: var(--a-soft);
+}
+
+.a-h3 {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--a-text);
+}
+
+.a-h3--sm {
+  font-size: 21px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+/* ---------- Isometric drawings (static fallback) ---------- */
+
+.a-isogrid {
+  position: absolute;
+  inset: -48px -16px -24px;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(30deg, rgba(125, 135, 155, 0.08) 0 1px, transparent 1px 36px),
+    repeating-linear-gradient(150deg, rgba(125, 135, 155, 0.08) 0 1px, transparent 1px 36px);
+  -webkit-mask-image: radial-gradient(ellipse 58% 52% at 50% 58%, #000 22%, transparent 76%);
+  mask-image: radial-gradient(ellipse 58% 52% at 50% 58%, #000 22%, transparent 76%);
+}
+
+.a-tower {
+  position: relative;
+}
+
+.a-tower__art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.a-tower__label {
+  position: absolute;
+  left: 54%;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 1.3;
+  transform: translateY(-50%);
+}
+
+.a-tower__num {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  color: var(--a-faint);
+}
+
+.a-tower__title {
+  font-size: 14px;
+  color: var(--a-muted);
+}
+
+.a-tower__label.is-active .a-tower__num {
+  color: var(--a-signal);
+}
+
+.a-tower__label.is-active .a-tower__title {
+  color: var(--a-text);
+  font-weight: 500;
+}
+
+.a-tower__label.tone-accent .a-tower__num {
+  color: var(--a-accent);
+}
+
+.a-tower__label.tone-accent .a-tower__title {
+  color: var(--a-soft);
+}
+
+/* ---------- Hero ---------- */
+
+.a-hero {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 56px;
+  padding-block: 72px 104px;
+}
+
+.a-hero__text {
+  flex: 1 1 380px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.a-hero h1 {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--a-strong);
+  text-wrap: balance;
+}
+
+.a-hero__intro {
+  margin: 0;
+  max-width: 34em;
+  font-size: 18px;
+  color: var(--a-muted);
+  text-wrap: pretty;
+}
+
+.a-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-family: var(--a-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+
+.a-hero__visual {
+  position: relative;
+  flex: 1 1 400px;
+  min-width: 0;
+}
+
+.a-hero__towers {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.a-hero__towers .a-tower {
+  padding: 0 7%;
+}
+
+.a-hero__tags {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a-tag,
+.a3d-tag {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  padding: 6px 4px;
+  border-radius: 10px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.va .a-tag,
+.va .a-tag:hover,
+.va .a3d-tag,
+.va .a3d-tag:hover {
+  color: var(--a-text);
+}
+
+.a-tag__name {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 8px;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 1.3;
+}
+
+.a-tag__period {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  color: var(--a-faint);
+}
+
+.a-now {
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--a-accent);
+  color: var(--a-accent);
+  font-family: var(--a-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.a-hero__hint {
+  position: relative;
+  margin: 24px 0 0;
+  text-align: center;
+  font-family: var(--a-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+
+/* ---------- Chapters ---------- */
+
+.a-chapter,
+.a-atlas {
+  border-top: 1px solid var(--a-hair);
+}
+
+.a-chapter__inner {
+  padding-block: 104px 40px;
+}
+
+.a-chapter--compact .a-chapter__inner,
+.a-chapter__inner--even {
+  padding-block: 104px;
+}
+
+.a-blocknav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 12px 0 0;
+  list-style: none;
+}
+
+.va .a-blocknav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid var(--a-pill-border);
+  color: var(--a-soft);
+  font-size: 14px;
+}
+
+.va .a-blocknav a:hover {
+  border-color: var(--a-faint);
+  color: var(--a-text);
+}
+
+.a-blocknav span {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  color: var(--a-faint);
+}
+
+.a-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+  margin-top: 64px;
+}
+
+.a-row {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 40px 56px;
+}
+
+.a-row__visual {
+  position: relative;
+  flex: 0 1 400px;
+  max-width: 460px;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.a-row__visual .a-isogrid {
+  inset: -32px -8px;
+  -webkit-mask-image: radial-gradient(ellipse 55% 50% at 26% 60%, #000 20%, transparent 78%);
+  mask-image: radial-gradient(ellipse 55% 50% at 26% 60%, #000 20%, transparent 78%);
+}
+
+.a-row__visual .a-tower__art {
+  width: 50%;
+}
+
+.a-row__text {
+  flex: 999 1 440px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.a-row__text--loose {
+  gap: 40px;
+}
+
+.a-blockhead {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.a-blockhead__n {
+  font-family: var(--a-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--a-signal);
+}
+
+.a-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: 16px;
+}
+
+.a-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 16px;
+  background: var(--a-card);
+  border: 1px solid var(--a-card-border);
+}
+
+.a-card__title {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: 19px;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--a-text);
+}
+
+.a-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--a-muted);
+  text-wrap: pretty;
+}
+
+.a-card__n {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--a-accent);
+}
+
+.a-card--sm {
+  gap: 10px;
+  padding: 20px;
+}
+
+.a-card--sm .a-card__title {
+  font-size: 17px;
+}
+
+.a-card--sm p {
+  font-size: 14px;
+}
+
+.a-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: auto 0 0;
+  padding: 4px 0 0;
+  list-style: none;
+}
+
+.a-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--a-chip-border);
+  color: var(--a-muted);
+  font-family: var(--a-mono);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.a-chip--metric {
+  padding: 5px 10px;
+  border: 0;
+  background: var(--a-signal-bg);
+  color: var(--a-signal);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.a-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: 24px 16px;
+  align-items: start;
+}
+
+.a-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- Atlas ---------- */
+
+.a-stack {
+  margin: 0;
+  font-family: var(--a-mono);
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--a-faint);
+}
+
+.a-shot {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.a-shot__frame {
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--a-card-border);
+  background: #131313;
+}
+
+.a-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1316 / 610;
+  object-fit: cover;
+  object-position: top;
+}
+
+.a-shot figcaption {
+  font-size: 13px;
+  color: var(--a-faint);
+}
+
+/* ---------- How I work ---------- */
+
+.a-principles {
+  background: var(--a-raised);
+  border-block: 1px solid var(--a-hair);
+}
+
+.a-principles__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  padding-block: 104px;
+}
+
+.a-principles__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a-principles__list li {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--a-chip-border);
+}
+
+.a-principles__n {
+  font-family: var(--a-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--a-signal);
+}
+
+.a-principles__list h3 {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--a-text);
+}
+
+/* ---------- Toolkit ---------- */
+
+.a-toolkit {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 104px;
+}
+
+.a-toolkit__groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr));
+  gap: 40px 56px;
+}
+
+.a-toolkit__group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.a-toolkit__group h3 {
+  margin: 0;
+  font-family: var(--a-mono);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+
+.a-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a-pills li {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--a-pill-border);
+  background: #0f141e;
+  font-size: 14px;
+  color: var(--a-soft);
+}
+
+/* ---------- Contact & footer ---------- */
+
+.a-contact {
+  position: relative;
+  border-top: 1px solid var(--a-hair);
+  /* Tall enough that the last sheet has fully scrolled away by the end of the page. */
+  min-height: calc(100svh - var(--a-header));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.a-contact__inner {
+  width: 100%;
+  max-width: 880px;
+  margin-inline: auto;
+  padding: 120px 32px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.a-emblem {
+  display: grid;
+  grid-template-columns: repeat(3, 44px);
+  gap: 12px;
+  align-items: end;
+}
+
+.a-contact__title {
+  margin: 0;
+  font-family: var(--a-display);
+  font-weight: 600;
+  font-size: clamp(40px, 5vw, 56px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--a-strong);
+  text-wrap: balance;
+}
+
+.a-contact__lede {
+  margin: 0;
+  max-width: 32em;
+  font-size: 18px;
+  color: var(--a-muted);
+}
+
+.a-contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 20px;
+  font-family: var(--a-mono);
+  font-size: 14px;
+}
+
+.a-contact__links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.va .a-contact__email {
+  color: var(--a-soft);
+}
+
+.a-contact__edu {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--a-faint);
+}
+
+.a-footer {
+  border-top: 1px solid var(--a-hair);
+}
+
+.a-footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-block: 28px;
+  font-size: 13px;
+  color: var(--a-faint);
+}
+
+/* ---------- 3D layer ---------- */
+
+.a3d-canvas {
+  display: none;
+}
+
+.a3d-pre .a3d-canvas {
+  display: block;
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.a3d .a3d-canvas {
+  opacity: 1;
+}
+
+.a3d-overlay {
+  display: none;
+}
+
+/* The overlay is laid out (but invisible) while booting so its tags can be measured for the hero framing. */
+.a3d-boot .a3d-overlay,
+.a3d .a3d-overlay {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  transition: opacity 0.16s ease;
+}
+
+.a3d-boot:not(.a3d) .a3d-overlay {
+  opacity: 0;
+}
+
+/* Static towers, tags and the hint are never shown at the same time as the 3D scene: they hide as soon as
+   3D is reserved (before first paint) and only come back if WebGL turns out to be unavailable. */
+.a3d-pre .a-fallback:not(.a-emblem) {
+  visibility: hidden;
+}
+
+.a3d-hovering body {
+  cursor: pointer;
+}
+
+.a3d-tag {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 6px 10px;
+  /* The scene caps the width to the gap between towers, so long names wrap instead of colliding. */
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: auto;
+  will-change: transform;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s;
+}
+
+.a3d-tag.is-shown {
+  opacity: 1;
+  visibility: visible;
+}
+
+.va .a3d-tag:hover {
+  background: rgba(90, 169, 255, 0.08);
+}
+
+.a3d-hint {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  font-family: var(--a-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--a-faint);
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.3s ease;
+}
+
+.a3d-hint.is-shown {
+  opacity: 1;
+}
+
+.a3d-blocklabel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  max-width: 260px;
+  line-height: 1.3;
+  opacity: 0;
+  will-change: transform;
+  transition: opacity 0.3s ease;
+}
+
+.a3d-blocklabel.is-shown {
+  opacity: 1;
+}
+
+.a3d-blocklabel__num {
+  font-family: var(--a-mono);
+  font-size: 12px;
+  color: var(--a-faint);
+}
+
+.a3d-blocklabel__title {
+  font-size: 14px;
+  color: var(--a-muted);
+}
+
+.a3d-blocklabel.is-active .a3d-blocklabel__num {
+  color: var(--a-signal);
+}
+
+.a3d-blocklabel.is-active .a3d-blocklabel__title {
+  color: var(--a-text);
+  font-weight: 500;
+}
+
+.a3d-blocklabel.tone-accent:not(.is-active) .a3d-blocklabel__num {
+  color: var(--a-accent);
+}
+
+.a3d-blocklabel.tone-accent:not(.is-active) .a3d-blocklabel__title {
+  color: var(--a-soft);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (min-width: 901px) {
+  .a-row__visual {
+    position: sticky;
+    top: 104px;
+  }
+
+  /* The 3D towers stand in for the emblem here, so it keeps their room above the title. */
+  .a3d-pre .a-emblem {
+    visibility: hidden;
+    height: clamp(150px, 24vh, 280px);
+  }
+}
+
+@media (max-width: 1100px) {
+  .a-row__visual {
+    flex-basis: 340px;
+  }
+}
+
+@media (max-width: 900px) {
+  .a-wrap {
+    padding-inline: 16px;
+  }
+
+  .a-js .a-menu-btn {
+    display: inline-flex;
+  }
+
+  .a-js .a-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    padding: 8px 16px 16px;
+    background: rgba(10, 13, 20, 0.97);
+    border-bottom: 1px solid var(--a-hair);
+  }
+
+  .a-js .a-links.is-open {
+    display: flex;
+  }
+
+  .a-js .a-links li:last-child {
+    margin: 8px 0 0;
+  }
+
+  .a-js .a-links .a-btn {
+    width: 100%;
+  }
+
+  .a-hero {
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 28px;
+    padding-block: 24px 64px;
+  }
+
+  .a-hero__text,
+  .a-hero__visual {
+    flex: none;
+  }
+
+  .a-chapter__inner {
+    padding-block: 64px 24px;
+  }
+
+  .a-chapter--compact .a-chapter__inner,
+  .a-chapter__inner--even {
+    padding-block: 64px;
+  }
+
+  .a-rows {
+    gap: 56px;
+    margin-top: 40px;
+  }
+
+  .a-row__visual {
+    flex-basis: 100%;
+    max-width: 340px;
+  }
+
+  .a-principles__inner,
+  .a-toolkit {
+    padding-block: 72px;
+  }
+
+  .a-contact__inner {
+    padding: 72px 16px;
+  }
+
+  /* 3D on compact screens: a band across the top, text scrolling below it. */
+  html.a3d-pre {
+    scroll-padding-top: calc(var(--a-band) + 12px);
+  }
+
+  html.a3d-pre.a3d-band-off {
+    scroll-padding-top: calc(var(--a-header) + 16px);
+  }
+
+  .a3d-pre .a3d-canvas {
+    bottom: auto;
+    height: var(--a-band);
+    z-index: 15;
+    pointer-events: auto;
+    background: var(--a-ground);
+    transition:
+      opacity 0.5s ease,
+      height 0.35s ease;
+  }
+
+  .a3d-pre.a3d-band-off .a3d-canvas {
+    height: 0;
+  }
+
+  .a3d .a3d-overlay {
+    bottom: auto;
+    height: var(--a-band);
+    z-index: 16;
+  }
+
+  .a3d.a3d-band-off .a3d-overlay {
+    opacity: 0;
+  }
+
+  .a3d-pre .a-hero__visual,
+  .a3d-pre .a-row__visual {
+    display: none;
+  }
+
+  .a3d-pre .a-hero {
+    padding-top: calc(var(--a-band) - var(--a-header) + 24px);
+  }
+
+  .a3d-tag {
+    padding: 4px 6px;
+  }
+
+  .a3d-tag {
+    white-space: normal;
+    max-width: 96px;
+  }
+
+  .a3d-tag .a-tag__name {
+    font-size: 13px;
+  }
+
+  .a3d-tag .a-tag__period {
+    display: none;
+  }
+
+  .a3d-tag .a-now {
+    display: none;
+  }
+
+  .a3d-blocklabel {
+    max-width: 46vw;
+    gap: 8px;
+    white-space: normal;
+  }
+
+  .a3d-blocklabel__title {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .a-hero h1 {
+    font-size: 34px;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+
+  .a-hero__intro {
+    font-size: 16px;
+  }
+
+  .a-hero .a-ctas {
+    flex-direction: column;
+  }
+
+  .a-tag__name {
+    font-size: 13px;
+  }
+
+  .a-tag__period {
+    font-size: 11px;
+  }
+
+  .a-hero__tags .a-now {
+    display: none;
+  }
+
+  .a-card {
+    padding: 20px;
+  }
+
+  .a-contact .a-ctas {
+    flex-direction: column;
+    align-self: stretch;
+  }
+
+  .a-contact__title {
+    font-size: 34px;
+  }
+
+  .a-contact__lede {
+    font-size: 16px;
+  }
+}

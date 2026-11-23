@@ -1,0 +1,24 @@
+---
+import type { Item } from '../../../content/site';
+
+interface Props {
+  item: Item;
+  small?: boolean;
+}
+
+const { item, small = false } = Astro.props;
+---
+
+<article class:list={['a-card', small && 'a-card--sm']}>
+  <h4 class="a-card__title">{item.title}</h4>
+  <p>{item.body}</p>
+  {
+    item.chips && item.chips.length > 0 && (
+      <ul class="a-chips">
+        {item.chips.map((c) => (
+          <li class:list={['a-chip', c.kind === 'metric' && 'a-chip--metric']}>{c.text}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>

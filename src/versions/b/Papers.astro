@@ -1,0 +1,99 @@
+---
+/** Report sheets drifting behind the hero headline (decorative). */
+type Paper = {
+  variant: 'bars' | 'line' | 'table';
+  x: string;
+  y: string;
+  w: number;
+  r: number;
+  sk?: number;
+  blur: number;
+  o?: number;
+  d: number;
+  dx: number;
+  dy: number;
+  mx?: string;
+  my?: string;
+  mw?: number;
+  mobile?: 'hide';
+};
+
+const papers: Paper[] = [
+  { variant: 'bars', x: '2%', y: '120px', w: 230, r: -16, sk: 5, blur: 2, d: 15, dx: 10, dy: -16, mx: '-34px', my: '96px', mw: 150 },
+  { variant: 'line', x: '27%', y: '54px', w: 200, r: 10, blur: 3.5, o: 0.8, d: 18, dx: -8, dy: 14, mx: '214px', my: '58px', mw: 130 },
+  { variant: 'table', x: '54%', y: '104px', w: 250, r: -7, sk: 3, blur: 1.5, d: 16, dx: 12, dy: 10, mobile: 'hide' },
+  { variant: 'bars', x: '74%', y: '290px', w: 210, r: 19, blur: 3, o: 0.85, d: 20, dx: -10, dy: -12, mobile: 'hide' },
+  { variant: 'line', x: '8%', y: '470px', w: 190, r: 24, blur: 4, o: 0.7, d: 17, dx: 8, dy: -10, mx: '8px', my: '430px', mw: 120 },
+  { variant: 'table', x: '45%', y: '520px', w: 220, r: -22, blur: 2.5, o: 0.9, d: 19, dx: -12, dy: 12, mx: '236px', my: '330px', mw: 140 },
+];
+
+const style = (p: Paper) =>
+  [
+    `--x:${p.x}`,
+    `--y:${p.y}`,
+    `--w:${p.w}px`,
+    `--r:${p.r}deg`,
+    `--sk:${p.sk ?? 0}deg`,
+    `--b:${p.blur}px`,
+    `--o:${p.o ?? 1}`,
+    `--d:${p.d}s`,
+    `--dx:${p.dx}px`,
+    `--dy:${p.dy}px`,
+    p.mx && `--mx:${p.mx}`,
+    p.my && `--my:${p.my}`,
+    p.mw && `--mw:${p.mw}px`,
+  ]
+    .filter(Boolean)
+    .join(';');
+---
+
+<div class="b-papers" aria-hidden="true">
+  {
+    papers.map((p) => (
+      <div class="b-paper" style={style(p)} data-mobile={p.mobile}>
+        <svg viewBox="0 0 200 260" focusable="false">
+          <rect x="0" y="0" width="200" height="260" rx="3" fill="#F3F2EF" />
+          {p.variant === 'bars' && (
+            <>
+              <rect x="18" y="20" width="96" height="7" fill="#B9B2A8" />
+              <rect x="18" y="38" width="160" height="3" fill="#D3CDC4" />
+              <rect x="18" y="47" width="138" height="3" fill="#D3CDC4" />
+              <rect x="18" y="56" width="150" height="3" fill="#D3CDC4" />
+              <path d="M22 196V150h18v46zM50 196V120h18v76zM78 196V136h18v60zM106 196V96h18v100zM134 196V110h18v86zM162 196V76h18v120z" fill="#C4BCB1" />
+              <rect x="18" y="200" width="164" height="2" fill="#B9B2A8" />
+              <rect x="18" y="216" width="120" height="3" fill="#D3CDC4" />
+              <rect x="18" y="225" width="96" height="3" fill="#D3CDC4" />
+            </>
+          )}
+          {p.variant === 'line' && (
+            <>
+              <rect x="18" y="20" width="110" height="7" fill="#B9B2A8" />
+              <rect x="18" y="38" width="150" height="3" fill="#D3CDC4" />
+              <rect x="18" y="47" width="120" height="3" fill="#D3CDC4" />
+              <path d="M18 186L48 164L78 172L108 132L138 142L180 98" fill="none" stroke="#9C9388" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+              <path d="M18 200H182" fill="none" stroke="#B9B2A8" stroke-width="2" />
+              <rect x="18" y="214" width="150" height="3" fill="#D3CDC4" />
+              <rect x="18" y="223" width="130" height="3" fill="#D3CDC4" />
+            </>
+          )}
+          {p.variant === 'table' && (
+            <>
+              <rect x="18" y="20" width="84" height="7" fill="#B9B2A8" />
+              <path d="M18 44H182M18 70H182M18 96H182M18 122H182M18 148H182M18 174H182M18 200H182" fill="none" stroke="#D3CDC4" stroke-width="1.5" />
+              <path d="M70 44V200M126 44V200" fill="none" stroke="#D3CDC4" stroke-width="1.5" />
+              <rect x="24" y="54" width="34" height="5" fill="#B9B2A8" />
+              <rect x="78" y="54" width="30" height="5" fill="#B9B2A8" />
+              <rect x="134" y="54" width="36" height="5" fill="#B9B2A8" />
+              <rect x="24" y="80" width="28" height="4" fill="#CFC8BE" />
+              <rect x="78" y="80" width="40" height="4" fill="#CFC8BE" />
+              <rect x="134" y="80" width="22" height="4" fill="#CFC8BE" />
+              <rect x="24" y="106" width="36" height="4" fill="#CFC8BE" />
+              <rect x="78" y="106" width="26" height="4" fill="#CFC8BE" />
+              <rect x="134" y="106" width="30" height="4" fill="#CFC8BE" />
+            </>
+          )}
+        </svg>
+      </div>
+    ))
+  }
+</div>

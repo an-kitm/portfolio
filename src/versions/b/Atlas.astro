@@ -1,0 +1,52 @@
+---
+import { atlas, withBase } from '../../content/site';
+import Anchor from './Anchor.astro';
+import { atlasDrawing } from './decor';
+---
+
+<section id="atlas" class="b-atlas b-panel" data-nav="dark" aria-labelledby="atlas-title">
+  <h2 id="atlas-title" class="b-display b-atlas__title b-reveal">
+    Atlas.<br /> Publish<br class="b-br-m" /> what<br class="b-br-d" /> Claude<br class="b-br-m" /> builds.
+  </h2>
+  <div class="b-atlas__row b-reveal" style="--i:1">
+    <p class="b-atlas__label">{atlas.label}</p>
+    <a class="b-link-arrow" href={atlas.github} target="_blank" rel="noopener"
+      >View on GitHub<svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" focusable="false"
+        ><path d="M6 3h7v7M13 3 4 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg
+      ></a
+    >
+  </div>
+  <p class="b-atlas__tagline b-reveal" style="--i:2">{atlas.tagline}</p>
+  <p class="b-atlas__problem b-reveal" style="--i:3">{atlas.problem}</p>
+
+  <div class="b-atlas__body">
+    <figure class="b-atlas__fig b-reveal">
+      <div class="b-atlas__shot">
+        <img
+          src={withBase(atlas.screenshot.file)}
+          width={atlas.screenshot.width}
+          height={atlas.screenshot.height}
+          alt={atlas.screenshot.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <Anchor kind="atlas" drawing={atlasDrawing(true)} palette="atlas-dark" group="atlas" class="b-atlas__block" />
+      <figcaption>{atlas.screenshot.caption}</figcaption>
+    </figure>
+    <ol class="b-atlas__list">
+      {
+        atlas.features.map((f, i) => (
+          <li class="b-reveal" style={`--i:${i}`}>
+            <h3 class="b-serif">{f.title}</h3>
+            <p>{f.body}</p>
+          </li>
+        ))
+      }
+      <li class="b-reveal" style="--i:3">
+        <h3 class="b-serif">Built to self-host</h3>
+        <p>{atlas.stack}</p>
+      </li>
+    </ol>
+  </div>
+</section>

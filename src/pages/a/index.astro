@@ -1,0 +1,21 @@
+---
+// Version A was chosen as the site. Its old review address forwards to the homepage.
+import { withBase } from '../../content/site';
+
+const home = withBase('');
+const canonical = new URL(home, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={canonical} />
+    <meta http-equiv="refresh" content={`0; url=${home}`} />
+  </head>
+  <body>
+    <a href={home}>Continue to the portfolio</a>
+  </body>
+</html>

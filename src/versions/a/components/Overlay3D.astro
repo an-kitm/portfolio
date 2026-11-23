@@ -1,0 +1,38 @@
+---
+import { atlas, companies } from '../../../content/site';
+
+// Tags follow the 3D towers (left to right: Noesys, Pixis, Even, then Atlas beyond the timeline).
+const order = ['noesys', 'pixis', 'even'] as const;
+const tags = order.map((id) => {
+  const c = companies.find((x) => x.id === id);
+  return { id, name: c?.name ?? id, period: c?.period ?? '', now: id === 'even' };
+});
+---
+
+<canvas class="a3d-canvas" aria-hidden="true"></canvas>
+<div class="a3d-overlay">
+  {
+    tags.map((t) => (
+      <a class="a3d-tag" data-tower={t.id} href={`#${t.id}`}>
+        <span class="a-tag__name">
+          {t.name}
+          {t.now && <span class="a-now">Now</span>}
+        </span>
+        <span class="a-tag__period">{t.period}</span>
+      </a>
+    ))
+  }
+  <p class="a3d-hint" aria-hidden="true">Scroll to open each company, or pick a tower</p>
+  <a class="a3d-tag" data-tower="atlas" href="#atlas">
+    <span class="a-tag__name">{atlas.name}</span>
+    <span class="a-tag__period">Side project</span>
+  </a>
+  {
+    [1, 2, 3].map((n) => (
+      <div class="a3d-blocklabel" aria-hidden="true" data-n={n}>
+        <span class="a3d-blocklabel__num">{String(n).padStart(2, '0')}</span>
+        <span class="a3d-blocklabel__title" />
+      </div>
+    ))
+  }
+</div>

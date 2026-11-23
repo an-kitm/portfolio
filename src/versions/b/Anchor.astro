@@ -1,0 +1,43 @@
+---
+/**
+ * A box in the page layout that holds a 3D object. It renders the static isometric drawing;
+ * when WebGL is available the scene draws a real block in exactly this box and hides the drawing.
+ */
+import IsoSvg from '../../components/IsoSvg.astro';
+import type { IsoDrawing } from '../../lib/iso';
+import { placeStyle, type Place } from './decor';
+
+interface Props {
+  kind: 'tower' | 'slab' | 'cube' | 'atlas';
+  drawing: IsoDrawing;
+  /** Company id, or atlas-paper / atlas-dark. */
+  palette: string;
+  /** Entrance group: hero, even, pixis, noesys, atlas or footer. */
+  group: string;
+  place?: Place;
+  k?: number;
+  edge?: 'colour' | 'paper' | 'none';
+  depth?: number;
+  class?: string;
+}
+
+const { kind, drawing, palette, group, place, k = 0, edge = 'colour', depth = 1, class: className } = Astro.props;
+const frac = ((drawing.width - 6) / drawing.width).toFixed(4);
+---
+
+<div
+  class:list={['b3d', className]}
+  style={place ? placeStyle(place) : undefined}
+  data-b3d={kind}
+  data-palette={palette}
+  data-group={group}
+  data-k={k}
+  data-edge={edge}
+  data-depth={depth}
+  data-frac={frac}
+  data-blur={place?.blur ?? 0}
+  data-mobile={place?.mobile}
+  aria-hidden="true"
+>
+  <IsoSvg drawing={drawing} />
+</div>
