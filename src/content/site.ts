@@ -74,7 +74,7 @@ export const companies: Company[] = [
         items: [
           {
             id: 'even-promise',
-            title: 'Even Promise launch tracking',
+            title: 'Even Promise launch',
             body: 'Even Promise is a doctor’s recorded outcome and recovery promise for a surgery patient. I set up its launch tracking, linking prescriptions, promises and surgery leads to measure offer rate and conversion.',
             chips: [def('offer rate'), def('conversion')],
             label: 'offer rate · conversion',
