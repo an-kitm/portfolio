@@ -1,8 +1,8 @@
 import { reducedMotion, webglAvailable } from '../../../lib/env';
 
 /**
- * Starts the 3D scene after first paint. Three.js and GSAP load in a separate chunk, so the page's
- * text is never blocked on them. If WebGL is missing (or `?webgl=0`), the static SVG towers stay.
+ * Starts the 3D town after first paint. Three.js loads in a separate chunk, so the page's text is
+ * never blocked on it. If WebGL is missing (or `?webgl=0`), the static SVG towers stay.
  */
 export function boot(): void {
   const root = document.documentElement;

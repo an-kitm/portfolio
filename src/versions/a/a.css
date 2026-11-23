@@ -204,7 +204,7 @@ main#main,
   }
 
   /* Nothing lies under the first sheet, so the floor grid stays visible behind the hero text. */
-  .a3d-pre .a-panel--hero {
+  .a3d-pre .a-panel.a-panel--hero {
     background: none;
   }
 
@@ -545,6 +545,9 @@ main#main,
   align-items: center;
   gap: 56px;
   padding-block: 72px 104px;
+  /* The opening screen stands alone: the first company only arrives once you scroll. */
+  min-height: calc(100svh - var(--a-header));
+  box-sizing: border-box;
 }
 
 .a-hero__text {
@@ -564,14 +567,6 @@ main#main,
   letter-spacing: -0.025em;
   color: var(--a-strong);
   text-wrap: balance;
-}
-
-.a-hero__intro {
-  margin: 0;
-  max-width: 34em;
-  font-size: 18px;
-  color: var(--a-muted);
-  text-wrap: pretty;
 }
 
 .a-hero__meta {
@@ -1205,13 +1200,20 @@ main#main,
   left: 0;
   top: 0;
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
   max-width: 260px;
-  line-height: 1.3;
+  padding: 5px 10px;
+  border: 1px solid var(--a-chip-border);
+  border-radius: 999px;
+  background: rgba(10, 13, 20, 0.78);
+  line-height: 1.2;
+  white-space: nowrap;
   opacity: 0;
   will-change: transform;
-  transition: opacity 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .a3d-blocklabel.is-shown {
@@ -1225,8 +1227,14 @@ main#main,
 }
 
 .a3d-blocklabel__title {
-  font-size: 14px;
-  color: var(--a-muted);
+  display: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--a-text);
+}
+
+.a3d-blocklabel.is-active {
+  border-color: rgba(255, 181, 71, 0.6);
 }
 
 .a3d-blocklabel.is-active .a3d-blocklabel__num {
@@ -1234,16 +1242,191 @@ main#main,
 }
 
 .a3d-blocklabel.is-active .a3d-blocklabel__title {
-  color: var(--a-text);
-  font-weight: 500;
+  display: inline;
 }
 
 .a3d-blocklabel.tone-accent:not(.is-active) .a3d-blocklabel__num {
-  color: var(--a-accent);
+  color: #b48cff;
 }
 
-.a3d-blocklabel.tone-accent:not(.is-active) .a3d-blocklabel__title {
+/* ---------- Free roam ---------- */
+
+.a3d-roam-btn {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--a-ghost-border);
+  border-radius: 999px;
+  background: rgba(10, 13, 20, 0.82);
+  color: var(--a-text);
+  font: 500 14px/1 var(--a-body);
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.a3d-roam-btn.is-shown {
+  opacity: 1;
+  visibility: visible;
+}
+
+.a3d-roam-btn:hover {
+  border-color: var(--a-accent);
+  background: rgba(90, 169, 255, 0.12);
+}
+
+.a3d-roam-btn svg {
+  color: var(--a-signal);
+}
+
+/* While exploring, the page steps aside and the town fills the screen. */
+html.a-roam {
+  overflow: hidden;
+}
+
+.a-roam .a-header,
+.a-roam main,
+.a-roam .a-footer,
+.a-roam .a-skip {
+  visibility: hidden;
+}
+
+.a-roam .a3d-canvas {
+  pointer-events: auto;
+  cursor: crosshair;
+}
+
+.a-roam .a3d-overlay {
+  clip-path: none !important;
+}
+
+.a3d-roam {
+  position: absolute;
+  inset: 0;
+  outline: none;
+}
+
+.a3d-roam[hidden] {
+  display: none;
+}
+
+.a3d-roam__exit {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--a-ghost-border);
+  border-radius: 999px;
+  background: rgba(10, 13, 20, 0.86);
+  color: var(--a-text);
+  font: 500 14px/1 var(--a-body);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.a3d-roam__exit:hover {
+  border-color: var(--a-accent);
+}
+
+.a3d-roam kbd {
+  display: inline-block;
+  padding: 3px 6px;
+  border-radius: 5px;
+  background: #1c2433;
   color: var(--a-soft);
+  font: 500 11px/1 var(--a-mono);
+}
+
+.a3d-roam__keys {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  max-width: calc(100% - 48px);
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid var(--a-hair);
+  border-radius: 999px;
+  background: rgba(10, 13, 20, 0.82);
+  color: var(--a-muted);
+  font-size: 13px;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+}
+
+.a3d-roam__keys span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.a3d-roam__keys--touch {
+  display: none;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .a3d-roam__keys--keyboard {
+    display: none;
+  }
+
+  .a3d-roam__keys--touch {
+    display: flex;
+  }
+}
+
+.a3d-roam__card {
+  position: absolute;
+  left: 24px;
+  top: 24px;
+  width: min(340px, calc(100% - 48px));
+  padding: 18px 20px 20px;
+  border: 1px solid var(--a-card-border);
+  border-radius: 14px;
+  background: rgba(16, 21, 31, 0.92);
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.a3d-roam__card[hidden] {
+  display: none;
+}
+
+.a3d-roam__eyebrow {
+  margin: 0 0 6px;
+  font: 500 11px/1.4 var(--a-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--a-faint);
+}
+
+.a3d-roam__title {
+  margin: 0;
+  font: 600 22px/1.2 var(--a-display);
+  color: var(--a-strong);
+}
+
+.a3d-roam__meta {
+  margin: 6px 0 16px;
+  font-size: 14px;
+  color: var(--a-muted);
 }
 
 /* ---------- Responsive ---------- */
@@ -1254,7 +1437,12 @@ main#main,
     top: 104px;
   }
 
-  /* The 3D towers stand in for the emblem here, so it keeps their room above the title. */
+  /* The town shows behind the closing words, so they get a soft dark backdrop. */
+  .a3d-pre .a-contact__inner {
+    background: radial-gradient(closest-side at 50% 64%, rgba(10, 13, 20, 0.88), rgba(10, 13, 20, 0.6) 60%, rgba(10, 13, 20, 0));
+  }
+
+  /* The 3D square stands in for the emblem here, so it keeps its room above the title. */
   .a3d-pre .a-emblem {
     visibility: hidden;
     height: clamp(150px, 24vh, 280px);
@@ -1306,6 +1494,7 @@ main#main,
     flex-direction: column-reverse;
     flex-wrap: nowrap;
     align-items: stretch;
+    justify-content: center;
     gap: 28px;
     padding-block: 24px 64px;
   }
@@ -1416,6 +1605,50 @@ main#main,
   .a3d-blocklabel__title {
     font-size: 13px;
   }
+
+  .a3d-roam-btn {
+    right: 12px;
+    bottom: 12px;
+    min-height: 40px;
+    padding: 0 14px;
+    font-size: 13px;
+  }
+
+  /* Exploring on a phone: the band grows to fill the screen. */
+  .a-roam .a3d-canvas,
+  .a-roam.a3d-pre.a3d-band-off .a3d-canvas,
+  .a3d.a-roam .a3d-overlay {
+    height: 100%;
+  }
+
+  .a3d-roam__exit {
+    top: 12px;
+    right: 12px;
+  }
+
+  .a3d-roam__card {
+    top: auto;
+    left: 12px;
+    right: 12px;
+    bottom: 72px;
+    width: auto;
+  }
+
+  .a3d-roam__keys {
+    bottom: 16px;
+    flex-wrap: nowrap;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .a3d-roam__keys--keyboard span:last-child {
+    display: none;
+  }
+
+  /* The old tower drawing does not belong to the town; with the town running, the closing words stand alone. */
+  .a3d-pre .a-emblem {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -1423,10 +1656,6 @@ main#main,
     font-size: 34px;
     line-height: 1.08;
     letter-spacing: -0.02em;
-  }
-
-  .a-hero__intro {
-    font-size: 16px;
   }
 
   .a-hero .a-ctas {

@@ -49,8 +49,6 @@ export const person = {
   education: 'B.Tech, National Institute of Technology Srinagar · 2017–2021',
   educationShort: 'B.Tech, NIT Srinagar · 2017–2021',
   headline: 'I turn data into product decisions.',
-  intro:
-    '4+ years across healthtech and adtech. At Even Healthcare I own launch analytics, experiment design, metric definitions and data quality on a PostgreSQL warehouse of about 1,900 tables and views.',
   skillsLine: 'SQL · Pandas · Experimentation',
   description:
     'Ankit Maurya is a Senior Product Analyst at Even Healthcare in Bangalore: launch analytics, experiment design, metric definitions and data quality.',

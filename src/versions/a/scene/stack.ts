@@ -32,6 +32,11 @@ const REVEAL = [
 const BOXES = '.a-card, .a-shot, .a-btn, .a-chip, .a-col, .a-stack';
 
 let panels: HTMLElement[] = [];
+/** Where each panel sits in the page with nothing pinned, and where it pins (px from the top of the screen). */
+const flowTop = new Map<HTMLElement, number>();
+const stickAt = new Map<HTMLElement, number>();
+/** Fired on window after the panels are measured again (layout changed). */
+export const STACK_MEASURED = 'a-stack-measured';
 
 export function initStack(): void {
   panels = Array.from(document.querySelectorAll<HTMLElement>('.a-panel'));
@@ -42,9 +47,6 @@ export function initStack(): void {
   const header = document.querySelector<HTMLElement>('.a-header');
   const wide = window.matchMedia(WIDE);
   const pinTop = new Map<HTMLElement, number>();
-  /** Where each panel sits in the page with nothing pinned, and where it pins (px from the top of the screen). */
-  const flowTop = new Map<HTMLElement, number>();
-  const stickAt = new Map<HTMLElement, number>();
   let vh = window.innerHeight;
   let queued = false;
   let has3d = false;
@@ -83,6 +85,7 @@ export function initStack(): void {
     main.classList.add('a-unstick');
     for (const p of panels) flowTop.set(p, p.getBoundingClientRect().top + window.scrollY);
     main.classList.remove('a-measuring', 'a-unstick');
+    window.dispatchEvent(new Event(STACK_MEASURED));
   };
 
   const update = () => {
@@ -156,6 +159,26 @@ function contentRight(panel: HTMLElement, y0: number, y1: number): number {
     if (!el.closest('.a-fallback')) take(el.getBoundingClientRect());
   });
   return right;
+}
+
+/**
+ * For each element, the scroll position at which its top reaches `line` px from the top of the screen. An element
+ * in a panel that pins before then never gets there, so it counts as reached when its panel pins.
+ */
+export function scrollReach(els: (HTMLElement | null)[], line: number): number[] {
+  const main = document.getElementById('main') ?? document.body;
+  main.classList.add('a-measuring', 'a-unstick');
+  const tops = els.map((el) => (el ? el.getBoundingClientRect().top + window.scrollY : 0));
+  main.classList.remove('a-measuring', 'a-unstick');
+  return els.map((el, i) => {
+    if (!el) return 0;
+    let reach = (tops[i] ?? 0) - line;
+    const panel = el.closest<HTMLElement>('.a-panel');
+    const stick = panel ? stickAt.get(panel) : undefined;
+    const top = panel ? flowTop.get(panel) : undefined;
+    if (stick !== undefined && Number.isFinite(stick) && top !== undefined) reach = Math.min(reach, top - stick);
+    return Math.max(0, reach);
+  });
 }
 
 /**
