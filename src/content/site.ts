@@ -48,7 +48,7 @@ export const person = {
   email: 'ankitm.nitsri@gmail.com',
   linkedin: 'https://www.linkedin.com/in/ankit-maurya-nitsri/',
   /** Public Google Drive file. The `uc?export=download` form downloads it straight away instead of opening Drive. */
-  resumeUrl: 'https://drive.google.com/uc?export=download&id=1WS3cRLgTH7K34NNZDKoVaclgHL8ZwA5M',
+  resumeUrl: 'https://drive.google.com/uc?export=download&id=1ISepktbBsK8cavtaxL8JX3rbJfi4agH4',
   education: 'B.Tech, National Institute of Technology Srinagar · 2017–2021',
   educationShort: 'B.Tech, NIT Srinagar · 2017–2021',
   headline: 'I turn data into product decisions.',
